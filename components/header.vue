@@ -4,7 +4,7 @@
       <!-- logo -->
       <div class="logo">
         <nuxt-link to="/">
-          <img src="http://157.122.54.189:9093/images/logo.jpg" alt="">
+          <img src="http://157.122.54.189:9093/images/logo.jpg" alt>
         </nuxt-link>
       </div>
 
@@ -27,11 +27,12 @@
       <!-- 登录/用户信息 -->
       <el-row type="flex" align="middle">
         <!-- 如果用户存在则展示用户信息，用户数据来自store -->
-        <el-dropdown v-if="false">
+        <!-- 模板中使用`$store.state.user.userInfo`可以访问`store`的数据，虽然长了点 -->
+        <el-dropdown v-if="$store.state.user.userInfo.token">
           <el-row type="flex" align="middle" class="el-dropdown-link">
             <nuxt-link to="#">
-              <img src="http://157.122.54.189:9093/images/pic_sea.jpeg">
-              用户名
+              <img :src="$axios.defaults.baseURL+$store.state.user.userInfo.user.defaultAvatar">
+              {{ $store.state.user.userInfo.user.nickname }}
             </nuxt-link>
             <i class="el-icon-caret-bottom el-icon--right" />
           </el-row>
@@ -61,98 +62,106 @@
 export default {
   methods: {
     // 用户退出
-    handleLogout () {}
+    handleLogout () {
+      // 需要调用 store 里面的 mutation 清理用户数据
+      this.$store.commit('user/cleanUserInfo')
+      this.$message({
+        type: 'success',
+        message: '后会有期啦'
+      })
+    }
   }
 }
 </script>
 <style scoped lang="less">
-    .header{
-        height: 60px;
-        line-height:60px;
-        background:#fff;
-        border-bottom: 1px #ddd solid;
-        box-shadow:0 3px 0 #f5f5f5;
-        box-sizing: border-box;
+.header {
+  height: 60px;
+  line-height: 60px;
+  background: #fff;
+  border-bottom: 1px #ddd solid;
+  box-shadow: 0 3px 0 #f5f5f5;
+  box-sizing: border-box;
 
-        .main{
-            width:1000px;
-            margin:0 auto;
-        }
+  .main {
+    width: 1000px;
+    margin: 0 auto;
+  }
 
-        .logo{
-            width:156px;
-            padding-top:8px;
+  .logo {
+    width: 156px;
+    padding-top: 8px;
 
-            img{
-                display: block;
-                width:100%;
-            }
-        }
-
-        .navs{
-            margin: 0 20px;
-            flex:1;
-
-            a{
-                display:block;
-                padding:0 20px;
-                height:60px;
-                box-sizing: border-box;
-
-                &:hover,&:focus, &:active {
-                    border-bottom:5px #409eff solid;
-                    color:#409eff;
-                }
-            }
-
-            /deep/ .nuxt-link-exact-active{
-                background:#409eff;
-                color:#fff!important;
-            }
-        }
-
-        .message{
-            height:36px;
-            line-height:1;
-            cursor:pointer;
-            .el-icon-bell{
-                margin-right:2px;
-                font-size:18px;
-            }
-        }
-
-        .el-dropdown-link{
-           margin-left:20px;
-
-           &:hover{
-               img{
-                    border-color: #409eff;
-               }
-            }
-
-           a{
-               display:block;
-           }
-
-            img{
-
-                width:32px;
-                height:32px;
-                vertical-align: middle;
-                border:2px #fff solid;
-                border-radius:50px;
-            }
-        }
-
-        .account-link{
-            font-size: 14px;
-            margin-left:10px;
-            color:#666;
-
-            &:hover{
-                color:#409eff;
-                text-decoration: underline;
-            }
-        }
+    img {
+      display: block;
+      width: 100%;
     }
+  }
+
+  .navs {
+    margin: 0 20px;
+    flex: 1;
+
+    a {
+      display: block;
+      padding: 0 20px;
+      height: 60px;
+      box-sizing: border-box;
+
+      &:hover,
+      &:focus,
+      &:active {
+        border-bottom: 5px #409eff solid;
+        color: #409eff;
+      }
+    }
+
+    /deep/ .nuxt-link-exact-active {
+      background: #409eff;
+      color: #fff !important;
+    }
+  }
+
+  .message {
+    height: 36px;
+    line-height: 1;
+    cursor: pointer;
+    .el-icon-bell {
+      margin-right: 2px;
+      font-size: 18px;
+    }
+  }
+
+  .el-dropdown-link {
+    margin-left: 20px;
+
+    &:hover {
+      img {
+        border-color: #409eff;
+      }
+    }
+
+    a {
+      display: block;
+    }
+
+    img {
+      width: 32px;
+      height: 32px;
+      vertical-align: middle;
+      border: 2px #fff solid;
+      border-radius: 50px;
+    }
+  }
+
+  .account-link {
+    font-size: 14px;
+    margin-left: 10px;
+    color: #666;
+
+    &:hover {
+      color: #409eff;
+      text-decoration: underline;
+    }
+  }
+}
 </style>

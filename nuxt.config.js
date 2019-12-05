@@ -36,7 +36,10 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/element-ui'
+    '@/plugins/element-ui',
+    { src: '@/plugins/localStorage', ssr: false },
+    // ssr: false代表不用在服务端上运行
+    '@/plugins/axios'
   ],
 
   /*
